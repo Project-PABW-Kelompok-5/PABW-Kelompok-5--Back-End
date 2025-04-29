@@ -5,6 +5,8 @@ const {auth, db} = require('../src/config/db');
 const authRoutes = require('../src/routes/authRoutes');
 const barangRoutes = require('../src/routes/barangRoutes');
 const kategoriRoutes = require('../src/routes/kategoriRoutes');
+const kurirRoutes = require('./routes/kurirRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 dotenv.config();
 
@@ -20,6 +22,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/barang', barangRoutes);
 // CRUD kategori
 app.use('/api/kategori', kategoriRoutes);
+// CRUD kurir
+app.use('/api/kurir', kurirRoutes);
+// admin
+app.use('/api/admin', adminRoutes);
 
 // Cek apakah server berjalan
 app.get('/', (req, res) => {

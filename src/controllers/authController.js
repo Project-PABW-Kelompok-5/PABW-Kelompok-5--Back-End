@@ -10,15 +10,19 @@ exports.register = async (req, res) => {
     try {
         const { username, email, password, no_telepon } = req.body;
 
-        // Hash password sebelum disimpan
+        // Set default role as 'user'
+        const userRole = 'user';
+
+        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Simpan pengguna di Firestore
+        // Simpan pengguna ke Firestore
         const newUser = await db.collection('users').add({
             username,
             email,
             password: hashedPassword,
             no_telepon,
+            role: userRole,  
             tanggal_registrasi: new Date()
         });
 
@@ -27,6 +31,7 @@ exports.register = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 // Login Pengguna
 exports.login = async (req, res) => {
@@ -49,11 +54,19 @@ exports.login = async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        // Buat token JWT
-        const token = jwt.sign({ id: userDoc.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "7d" });
+        // Buat token JWT dengan role pengguna
+        const token = jwt.sign(
+            { id: userDoc.id, email: user.email, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: "7d" }
+        );
 
-        res.json({ token, user: { id: userDoc.id, username: user.username, email: user.email } });
+        res.json({
+            token,
+            user: { id: userDoc.id, username: user.username, email: user.email, role: user.role }
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+
