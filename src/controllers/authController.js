@@ -5,28 +5,21 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-// Register Pengguna
 exports.register = async (req, res) => {
     try {
-        const { username, email, password, no_telepon } = req.body;
+        const { username, email, no_telepon, uid } = req.body;
 
-        // Set default role as 'user'
         const userRole = 'user';
 
-        // Hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Simpan pengguna ke Firestore
-        const newUser = await db.collection('users').add({
+        const newUser = await db.collection('users').doc(uid).set({
             username,
             email,
-            password: hashedPassword,
             no_telepon,
-            role: userRole,  
+            role: userRole,
             tanggal_registrasi: new Date()
         });
 
-        res.status(201).json({ id: newUser.id, message: "User registered successfully" });
+        res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
