@@ -1,15 +1,17 @@
 // routes/adminRoutes.js
-const express = require('express');
-const router = express.Router();
+const { Router } = require('express');
+const router = Router();
 const adminController = require('../controllers/adminController');
-const { verifyToken } = require('../middlewares/authMiddlewares');
-const { verifyAdmin } = require('../middlewares/authMiddlewares');
+const verifyFirebaseToken = require('../middlewares/verifyFirebaseToken');
+const { verifyAdmin } = require('../middlewares/verifyAdmin'); // jangan pakai authMiddlewares lagi
+
 
 // CRUD user (dengan middleware untuk verifikasi token dan role admin)
-router.post('/users', verifyToken, verifyAdmin, adminController.addUser);
-router.get('/users', verifyToken, verifyAdmin, adminController.getAllUsers);
-router.get('/users/:id', verifyToken, verifyAdmin, adminController.getUserById);
-router.put('/users/:id', verifyToken, verifyAdmin, adminController.updateUser);
-router.delete('/users/:id', verifyToken, verifyAdmin, adminController.deleteUser);
+router.post('/users', verifyFirebaseToken, verifyAdmin, adminController.addUser);
+router.get('/users', verifyFirebaseToken, verifyAdmin, adminController.getAllUsers);
+router.get('/users/:id', verifyFirebaseToken, verifyAdmin, adminController.getUserById);
+router.put('/users/:id', verifyFirebaseToken, verifyAdmin, adminController.updateUser);
+router.delete('/users/:id', verifyFirebaseToken, verifyAdmin, adminController.deleteUser);
+
 
 module.exports = router;

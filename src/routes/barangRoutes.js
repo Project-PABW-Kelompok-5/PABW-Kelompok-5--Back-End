@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const barangControlller = require('../controllers/barangController');
-const { verifyToken } = require('../middlewares/authMiddlewares');
+const verifyFirebaseToken = require('../middlewares/verifyFirebaseToken');
 
-router.post('/', verifyToken,barangControlller.tambahBarang);
+
+router.post('/', verifyFirebaseToken,barangControlller.tambahBarang);
 router.get('/', barangControlller.getSemuaBarang);
-router.get('/user', verifyToken, barangControlller.getBarangUser);
+router.get('/user', verifyFirebaseToken, barangControlller.getBarangUser);
 router.put('/:id', barangControlller.editBarang);
-router.delete('/:id', verifyToken, barangControlller.hapusBarang);
+router.delete('/:id', verifyFirebaseToken, barangControlller.hapusBarang);
 
 module.exports = router;

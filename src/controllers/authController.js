@@ -26,40 +26,23 @@ exports.register = async (req, res) => {
 };
 
 
-// Login Pengguna
-exports.login = async (req, res) => {
+exports.getUserInfo = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        // Ambil UID dari token yang sudah diverifikasi di middleware
+        const userDoc = await db.collection('users').doc(req.user.uid).get();
 
-        // Cari pengguna berdasarkan email
-        const userSnapshot = await db.collection('users').where('email', '==', email).get();
-
-        if (userSnapshot.empty) {
-            return res.status(404).json({ message: "User not found" });
+        if (!userDoc.exists) {
+            return res.status(404).json({ message: "User not found in Firestore" });
         }
 
-        const userDoc = userSnapshot.docs[0];
         const user = userDoc.data();
-
-        // Cek password
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: "Invalid credentials" });
-        }
-
-        // Buat token JWT dengan role pengguna
-        const token = jwt.sign(
-            { id: userDoc.id, email: user.email, role: user.role },
-            process.env.JWT_SECRET,
-            { expiresIn: "7d" }
-        );
-
         res.json({
-            token,
-            user: { id: userDoc.id, username: user.username, email: user.email, role: user.role }
+            id: req.user.uid,
+            username: user.username,
+            email: user.email,
+            role: user.role,
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
-
