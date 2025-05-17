@@ -7,7 +7,8 @@ exports.tambahBarang = async (req, res) => {
     const id_barang = uuidv4();
     
     // Ambil id_user dari token yang sudah diverifikasi di middleware
-    const id_user = req.user.id;
+    const id_user = req.user.uid;
+
 
     const {
       nama_barang,
@@ -43,16 +44,19 @@ exports.tambahBarang = async (req, res) => {
 // Ambil semua barang
 exports.getSemuaBarang = async (req, res) => {
   try {
-    const snapshot = await db.collection('barang').get();
-    const barang = snapshot.docs.map(doc => ({
-      id: doc.id,
+    const snapshot = await db.collection('barang').get(); 
+    const data = snapshot.docs.map(doc => ({
+      id_barang: doc.id,
       ...doc.data()
     }));
-    res.status(200).json(barang);
+    res.status(200).json({ data });  // Mengembalikan object dengan properti data (array)
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Gagal mengambil semua barang:", error);
+    res.status(500).json({ message: "Gagal mengambil data" });
   }
 };
+
+
 
 // Ambil barang berdasarkan id user login
 exports.getBarangUser = async (req, res) => {
