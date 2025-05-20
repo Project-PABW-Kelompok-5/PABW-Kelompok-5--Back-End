@@ -88,3 +88,27 @@ exports.deleteUser = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+// PATCH /api/admin/users/:id/saldo
+exports.updateSaldo = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { amount } = req.body; // bisa + atau -
+  
+      const userRef = db.collection("users").doc(id);
+      const doc = await userRef.get();
+  
+      if (!doc.exists) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      const currentSaldo = doc.data().saldo || 0;
+      const newSaldo = currentSaldo + amount;
+  
+      await userRef.update({ saldo: newSaldo });
+      res.status(200).json({ message: "Saldo updated", newSaldo });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+  

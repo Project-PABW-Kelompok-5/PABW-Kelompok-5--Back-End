@@ -2,23 +2,30 @@ const e = require('express');
 const {db, firebase} = require('../config/firebaseConfig');
 const dotenv = require('dotenv');
 
-dotenv.config;
+dotenv.config();
 
 exports.addKurir = async (req, res) => {
     try {
-        const {nama, email, no_telepon} = req.body;
+        const { nama, email, no_telepon, password } = req.body;
+
+        // Validasi sederhana (opsional tapi bagus untuk mencegah data kosong)
+        if (!nama || !email || !no_telepon || !password) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
 
         const newKurir = await db.collection('kurir').add({
             nama,
             email,
-            no_telepon
+            no_telepon,
+            password 
         });
 
-        res.status(201).json({id: newKurir.id, message: "Kurir added successfully"});
+        res.status(201).json({ id: newKurir.id, message: "Kurir added successfully" });
     } catch (error) {
-        res.status(500).json({error: error.message});
+        res.status(500).json({ error: error.message });
     }
 };
+
 
 exports.getKurir = async (req, res) => {
     try {

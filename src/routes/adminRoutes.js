@@ -12,6 +12,6 @@ router.get('/users', verifyFirebaseToken, verifyAdmin, adminController.getAllUse
 router.get('/users/:id', verifyFirebaseToken, verifyAdmin, adminController.getUserById);
 router.put('/users/:id', verifyFirebaseToken, verifyAdmin, adminController.updateUser);
 router.delete('/users/:id', verifyFirebaseToken, verifyAdmin, adminController.deleteUser);
-
+router.patch('/users/:id', verifyFirebaseToken, verifyAdmin, adminController.updateSaldo);
 
 module.exports = router;
