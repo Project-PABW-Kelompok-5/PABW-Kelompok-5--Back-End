@@ -18,14 +18,14 @@ const db = admin.firestore();
 
 // Konfigurasi Firebase Client untuk Authentication
 const firebaseConfig = {
-    apiKey: "AIzaSyCAOvzGJat0Sw82RRHsDshY0jxBHPRUZ1E",
-    authDomain: "pabw-kel-5.firebaseapp.com",
-    projectId: "pabw-kel-5",
-    storageBucket: "pabw-kel-5.firebasestorage.app",
-    messagingSenderId: "874185015872",
-    appId: "1:874185015872:web:d6543f65c800d91f8395a5",
-    measurementId: "G-W3C7Z6J1JL",
-};
+    apiKey: "AIzaSyAIFHyOyJbHoTOR6NLSRQpMStkIoaIilmo",
+    authDomain: "blessing-store-pabw.firebaseapp.com",
+    projectId: "blessing-store-pabw",
+    storageBucket: "blessing-store-pabw.firebasestorage.app",
+    messagingSenderId: "135890577598",
+    appId: "1:135890577598:web:bd4be1c8a42d676ba816ef",
+    measurementId: "G-HGNCWZRJYX"
+  };
 
 // Cek apakah Firebase Client sudah diinisialisasi
 if (!firebase.getApps || firebase.getApps().length === 0) {
